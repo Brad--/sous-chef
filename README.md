@@ -22,5 +22,5 @@ To run the ui, navigate to the `sous-chef-ui` directory and run `npm start`
 
 To run the backend in IntelliJ, navigate to `sous-chef-server/src/main/java/server/SousChefRunner` and select the arrow to the left of the class definition
 
-To run the backend in the command line, navigate to the `sous-chef-server` directory and run `mvn spring-boot:run`
+To run the backend in the command line, navigate to the `sous-chef-server` directory and run `mvn install spring-boot:run`
 **Note:** Spring Boot recommends exporting the following when running from the command line: `export MAVEN_OPTS=-Xmx1024m -XX:MaxPermSize=128M`
