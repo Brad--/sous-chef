@@ -1,19 +1,22 @@
-# See http://help.github.com/ignore-files/ for more about ignoring files.
-
-# compiled output
-sous-chef-ui/dist
-sous-chef-ui/tmp
+#  See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # dependencies
-sous-chef-ui/node_modules
+node_modules/
+node/
+target/
+*.jar
 
 # IDEs and editors
 /.idea
+backend/.idea
+backend/target
+*.iml
 .project
 .classpath
 .c9/
 *.launch
 .settings/
+.editorconfig
 
 # IDE - VSCode
 .vscode/*
