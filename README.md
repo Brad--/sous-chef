@@ -6,6 +6,8 @@ Web application project for kitchen management and recipe suggestions
 
 [Running Locally](#running-locally)
 
+[Tips and Tricks](#tips-and-tricks)
+
 ### Prerequisites
 
 | Prerequisite                                | Version |
@@ -23,3 +25,6 @@ Web application project for kitchen management and recipe suggestions
 3. The app should be up at `localhost:8080`
 
 **Note:** Spring Boot recommends exporting the following when running from the command line: `export MAVEN_OPTS=-Xmx1024m -XX:MaxPermSize=128M`
+
+### Tips and Tricks
+- Running maven install every time you make a frontend change can be quite tedious. You can [configure the project](https://blog.jdriven.com/2016/12/angular2-spring-boot-getting-started/) (Skip to Step 7) to automatically build frontend changes. You'll have to run the frontend/backend independently with this configuration, but it pays off for frontend work!
