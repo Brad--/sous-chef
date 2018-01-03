@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Response, Headers, RequestOptions } from '@angular/http';
 
 @Injectable()
 export class AuthService{
@@ -11,9 +11,11 @@ export class AuthService{
 		) {}
 
 	authenticate(creds, callback) {
-		var headers = creds ? this.makeHeaders(creds) : {};
+		var options = new RequestOptions({
+			headers: creds ? this.makeHeaders(creds) : new Headers()
+		});
 
-		http.get('auth', {headers: headers})
+		this.http.get('auth', options)
 			.subscribe(res => {
 				this.authenticated = res.json().name ? true : false;
 				callback && callback();
@@ -21,6 +23,6 @@ export class AuthService{
 	}
 
 	private makeHeaders(creds){
-		return { authorization: "Basic " + btoa(creds.username + ":" + creds.password)};
+		return new Headers({ authorization: "Basic " + btoa(creds.username + ":" + creds.password)});
 	}
 }
