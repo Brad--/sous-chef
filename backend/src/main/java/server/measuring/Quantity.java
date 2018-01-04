@@ -4,6 +4,8 @@ public class Quantity {
     private String name; // eg Tablespoon
     private double quantity;
 
+    public Quantity() {}
+
     public String getName() {
         return name;
     }

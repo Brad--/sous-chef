@@ -7,6 +7,8 @@ public class Ingredient {
     private String name;
     private Quantity quantity;
 
+    public Ingredient(){}
+
     public String getName() {
         return name;
     }
