@@ -28,6 +28,7 @@ public class UserTest {
     @Test
     public void testCreateUser() throws JsonProcessingException{
         User user = new User("Owen", "owen@gmail.com", "1234");
+//        System.out.println(objectMapper.writeValueAsString(user));
         given().contentType(ContentType.JSON).body(user)
                 .when().post(USER_ENDPOINT)
                 .then().assertThat().statusCode(equalTo(HttpStatus.OK.value()));
