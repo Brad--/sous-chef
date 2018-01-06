@@ -1,5 +1,8 @@
 package server.measuring;
 
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class Quantity {
     private String name; // eg Tablespoon
     private double quantity;

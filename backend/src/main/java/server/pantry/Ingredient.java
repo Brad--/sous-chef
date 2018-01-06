@@ -3,18 +3,30 @@ package server.pantry;
 import server.measuring.Quantity;
 import server.measuring.QuantityMismatchException;
 
+import javax.persistence.*;
+
+@Entity
 public class Ingredient {
-    private String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String ingredientName;
+
+    @Embedded
     private Quantity quantity;
 
     public Ingredient(){}
 
+    public Long getId() {
+        return id;
+    }
+
     public String getName() {
-        return name;
+        return ingredientName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.ingredientName = name;
     }
 
     public Quantity getQuantity() {

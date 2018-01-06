@@ -6,6 +6,8 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <hibernate.version>4.1.4.Final</hibernate.version>
+        <hibernate.entitymanager.version>5.2.3.Final</hibernate.entitymanager.version>
     </properties>
 
     <name>backend</name>
