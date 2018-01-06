@@ -1,16 +1,28 @@
 package server.User;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-@RestController
+import java.util.List;
+
+@RestController("/user")
 public class UserController {
 
-    @PostMapping(value = "/user")
-    public User getUser(
+    @Autowired
+    private UserRepository userRepository;
+
+    @PostMapping()
+    public User createUser(
             @RequestBody User user
     ) {
+        userRepository.save(user);
         return user;
+    }
+
+    @GetMapping()
+    public User getUser(
+            @RequestParam Long id
+    ) {
+        return userRepository.findOne(id);
     }
 }

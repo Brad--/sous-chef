@@ -1,23 +1,36 @@
 package server.User;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import server.pantry.PantryModel;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 // Shouts: https://hackernoon.com/spring-boot-persisting-data-with-rest-jpa-33a063e8b147
+@Entity
 public class User {
+    @Id
+    @GeneratedValue
+    private long id;
+
     private String name;
     private String email;
     private String password;
 
     private PantryModel pantry;
 
-    public User() {
-    }
+    public User() { }
 
     public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
-//        this.pantry = new PantryModel();
+        this.pantry = new PantryModel();
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getName() {
@@ -32,6 +45,7 @@ public class User {
         return password;
     }
 
+    @JsonSerialize(as = PantryModel.class)
     public PantryModel getPantry() {
         return pantry;
     }
