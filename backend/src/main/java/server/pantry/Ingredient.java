@@ -17,6 +17,11 @@ public class Ingredient {
 
     public Ingredient(){}
 
+    public Ingredient(String ingredientName, Quantity quantity) {
+        this.ingredientName = ingredientName;
+        this.quantity = quantity;
+    }
+
     public Long getId() {
         return id;
     }

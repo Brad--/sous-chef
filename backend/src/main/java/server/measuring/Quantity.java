@@ -9,6 +9,11 @@ public class Quantity {
 
     public Quantity() {}
 
+    public Quantity(String name, double quantity) {
+        this.name = name;
+        this.quantity = quantity;
+    }
+
     public String getName() {
         return name;
     }

@@ -1,6 +1,8 @@
 package server.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.pantry.Ingredient;
 
@@ -10,6 +12,11 @@ import java.util.List;
 public class UserController {
 
     private UserService userService;
+
+    @ExceptionHandler({ExistingEmailException.class})
+    public ResponseEntity<Object> handleException(Exception e) {
+        return new ResponseEntity<>("Email address already in use.", HttpStatus.CONFLICT);
+    }
 
     @Autowired
     public UserController(
@@ -21,7 +28,7 @@ public class UserController {
     @PostMapping()
     public User createUser(
             @RequestBody User user
-    ) {
+    ) throws ExistingEmailException {
         return userService.createUser(user);
     }
 
@@ -34,9 +41,9 @@ public class UserController {
 
     @PostMapping(value = "/user/pantry")
     public void addIngredients(
-            @RequestParam Long id,
+            @RequestBody Long id,
             @RequestBody List<Ingredient> ingredients
     ) {
-
+        userService.addIngredientsToPantry(id, ingredients);
     }
 }

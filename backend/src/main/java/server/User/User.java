@@ -1,9 +1,11 @@
 package server.User;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import server.pantry.Ingredient;
 import server.pantry.PantryModel;
 
 import javax.persistence.*;
+import java.util.List;
 
 // Shouts: https://hackernoon.com/spring-boot-persisting-data-with-rest-jpa-33a063e8b147
 @Entity
@@ -48,5 +50,9 @@ public class User {
     @JsonSerialize(as = PantryModel.class)
     public PantryModel getPantry() {
         return pantry;
+    }
+
+    public void addItemsToPantry(List<Ingredient> ingredients) {
+        this.pantry.addIngredientList(ingredients);
     }
 }
