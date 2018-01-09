@@ -18,6 +18,12 @@ public class UserController {
         return new ResponseEntity<>("Email address already in use.", HttpStatus.CONFLICT);
     }
 
+    // Clearly this is a bad format. Gotta get better exception handling
+    @ExceptionHandler({UserNotFoundException.class})
+    public ResponseEntity<Object> handleUserNotFound(Exception e) {
+        return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+    }
+
     @Autowired
     public UserController(
             UserService userService
@@ -39,11 +45,13 @@ public class UserController {
         return userService.getUserById(id);
     }
 
-    @PostMapping(value = "/user/pantry")
-    public void addIngredients(
-            @RequestBody Long id,
-            @RequestBody List<Ingredient> ingredients
-    ) {
-        userService.addIngredientsToPantry(id, ingredients);
+    @PostMapping("/user/{userId}/pantry")
+    public User addIngredients(
+            @PathVariable("userId") Long userId,
+            @RequestBody List<Ingredient> ingredientList
+    ) throws UserNotFoundException {
+        return userService.addIngredientsToPantry(userId, ingredientList);
     }
+
+    // TODO: Delete User
 }

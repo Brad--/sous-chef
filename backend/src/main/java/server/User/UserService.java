@@ -34,10 +34,12 @@ public class UserService {
         return userRepository.findOne(id);
     }
 
-    public User addIngredientsToPantry(Long id, List<Ingredient> ingredients) {
+
+    // TODO actually generate the id for the ingredient
+    public User addIngredientsToPantry(Long id, List<Ingredient> ingredients) throws UserNotFoundException{
         User user = getUserById(id);
         if(user == null) {
-            // TODO throw user not found
+            throw new UserNotFoundException();
         }
         user.addItemsToPantry(ingredients);
         // TODO update the user in the db. Tomorrow!
