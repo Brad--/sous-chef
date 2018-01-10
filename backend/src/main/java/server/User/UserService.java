@@ -42,7 +42,8 @@ public class UserService {
             throw new UserNotFoundException();
         }
         user.addItemsToPantry(ingredients);
-        // TODO update the user in the db. Tomorrow!
+        userRepository.save(user);
+        // TODO save new ingredients in the pantry or update existing ones. Imma go play starcraft
         return user;
     }
 }
