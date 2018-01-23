@@ -45,12 +45,13 @@ public class UserController {
         return userService.getUserById(id);
     }
 
-    @PostMapping("/user/{userId}/pantry")
+    @PostMapping("/user/{userId}/pantry/{pantryId}")
     public User addIngredients(
             @PathVariable("userId") Long userId,
+            @PathVariable("pantryId") Long pantryId,
             @RequestBody List<Ingredient> ingredientList
     ) throws UserNotFoundException {
-        return userService.addIngredientsToPantry(userId, ingredientList);
+        return userService.addIngredientsToPantry(userId, pantryId, ingredientList);
     }
 
     // TODO: Delete User

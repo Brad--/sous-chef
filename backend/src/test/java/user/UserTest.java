@@ -82,7 +82,7 @@ public class UserTest {
     @Test
     public void gimmeJson() throws JsonProcessingException{
         User user = new User("Owen", "owen@gmail.com", "1234");
-        user.addItemsToPantry(getIngredient());
+//        user.addItemsToPantry(getIngredient());
         System.out.println(objectMapper.writeValueAsString(user));
     }
 }

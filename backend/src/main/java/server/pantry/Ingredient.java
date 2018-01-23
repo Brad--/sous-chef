@@ -5,11 +5,8 @@ import server.measuring.QuantityMismatchException;
 
 import javax.persistence.*;
 
-@Entity
+@Embeddable
 public class Ingredient {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     private String ingredientName;
 
     @Embedded
@@ -20,10 +17,6 @@ public class Ingredient {
     public Ingredient(String ingredientName, Quantity quantity) {
         this.ingredientName = ingredientName;
         this.quantity = quantity;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getName() {

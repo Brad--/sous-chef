@@ -34,14 +34,12 @@ public class UserService {
         return userRepository.findOne(id);
     }
 
-
-    // TODO actually generate the id for the ingredient
-    public User addIngredientsToPantry(Long id, List<Ingredient> ingredients) throws UserNotFoundException{
-        User user = getUserById(id);
+    public User addIngredientsToPantry(Long userId, Long pantryId, List<Ingredient> ingredients) throws UserNotFoundException{
+        User user = getUserById(userId);
         if(user == null) {
             throw new UserNotFoundException();
         }
-        user.addItemsToPantry(ingredients);
+//        user.addItemsToPantry(ingredients);
         userRepository.save(user);
         // TODO save new ingredients in the pantry or update existing ones. Imma go play starcraft
         return user;

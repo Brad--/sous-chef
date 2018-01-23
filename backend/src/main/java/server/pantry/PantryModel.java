@@ -1,18 +1,29 @@
 package server.pantry;
 
+import server.User.User;
 import server.measuring.QuantityMismatchException;
 
-import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-@Embeddable
+@Entity
+@Table(name = "Pantry")
 public class PantryModel {
+    @Id
+    private Long id;
 
-    @OneToMany
-    @Embedded
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name="User",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "pantry_id")
+    )
+    private Set<User> users = new HashSet<>();
+
+    @ElementCollection
     private List<Ingredient> ingredientList;
 
     public PantryModel(){
