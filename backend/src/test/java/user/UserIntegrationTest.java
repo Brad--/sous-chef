@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.http.ContentType;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import server.User.User;
@@ -18,7 +20,9 @@ import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static org.hamcrest.Matchers.equalTo;
 
-public class UserTest {
+// Fix order so that dependent tests are run first
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class UserIntegrationTest {
 
     private static final String USER_ENDPOINT = "/api/user";
     private static final String PANTRY_ADD_ENDPOINT = USER_ENDPOINT + "/pantry";
@@ -42,14 +46,23 @@ public class UserTest {
         return Collections.singletonList(ingredient);
     }
 
+    // This test should run before all other tests
     @Test
-    public void testCreateUser() {
+    public void _testCreateUser() {
         User user = getOwen();
-//        System.out.println(objectMapper.writeValueAsString(user));
         given().contentType(ContentType.JSON)
                 .body(user)
                 .when().post(USER_ENDPOINT)
                 .then().assertThat().statusCode(equalTo(HttpStatus.OK.value()));
+    }
+
+    @Test
+    public void testCreateUserAlreadyExists() {
+        User user = getOwen();
+        given().contentType(ContentType.JSON)
+                .body(user)
+                .when().post(USER_ENDPOINT)
+                .then().assertThat().statusCode(equalTo(HttpStatus.CONFLICT.value()));
     }
 
     @Test
@@ -77,12 +90,5 @@ public class UserTest {
                 .when().get(USER_ENDPOINT)
                 .then().assertThat()
                 .body("pantry.ingredientList[0].name", equalTo("Tofu"));
-    }
-
-    @Test
-    public void gimmeJson() throws JsonProcessingException{
-        User user = new User("Owen", "owen@gmail.com", "1234");
-//        user.addItemsToPantry(getIngredient());
-        System.out.println(objectMapper.writeValueAsString(user));
     }
 }

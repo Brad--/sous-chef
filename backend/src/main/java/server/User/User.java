@@ -48,9 +48,13 @@ public class User {
         return password;
     }
 
-    @JsonSerialize(as = PantryModel.class)
+//    @JsonSerialize(as = PantryModel.class)
     public Set<PantryModel> getPantries() {
         return pantries;
+    }
+
+    public void addPantry(PantryModel pantry) {
+        this.pantries.add(pantry);
     }
 
     public void addItemsToPantry(List<Ingredient> ingredients, Long pantryId) {

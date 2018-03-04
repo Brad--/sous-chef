@@ -1,8 +1,12 @@
 package server.User;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import server.pantry.Ingredient;
+import server.pantry.PantryModel;
+import server.pantry.PantryService;
 
 import java.util.List;
 
@@ -10,12 +14,17 @@ import java.util.List;
 public class UserService {
 
     private UserRepository userRepository;
+    private PantryService pantryService;
+
+    private static Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     public UserService(
-            UserRepository userRepository
+            UserRepository userRepository,
+            PantryService pantryService
     ) {
         this.userRepository = userRepository;
+        this.pantryService = pantryService;
     }
 
     public User createUser(User user) throws ExistingEmailException{
@@ -23,6 +32,10 @@ public class UserService {
             throw new ExistingEmailException();
         }
         userRepository.save(user);
+        PantryModel defaultPantry = pantryService.createPantry(user.getName() + "'s Pantry", user);
+        user.addPantry(defaultPantry);
+        userRepository.save(user);
+        logger.trace("Created user '{}'", user.getName());
         return user;
     }
 

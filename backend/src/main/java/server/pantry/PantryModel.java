@@ -13,7 +13,9 @@ import java.util.Set;
 @Table(name = "Pantry")
 public class PantryModel {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)    
     private Long id;
+    private String name;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
@@ -27,7 +29,12 @@ public class PantryModel {
     private List<Ingredient> ingredientList;
 
     public PantryModel(){
-        ingredientList = new ArrayList<>();
+        this.ingredientList = new ArrayList<>();
+    }
+
+    public PantryModel(String name) {
+        this();
+        this.name = name;
     }
 
     // Using 'list' instead of 'get' because Jackson auto deserialization puts it in the object if you start with 'get'
@@ -38,6 +45,18 @@ public class PantryModel {
 
     public List<Ingredient> getIngredientList() {
         return ingredientList;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setIngredientList(List<Ingredient> ingredientList) {
+        this.ingredientList = ingredientList;
     }
 
     public void addIngredientList(List<Ingredient> ingredients) {
@@ -56,6 +75,12 @@ public class PantryModel {
             ingredientList.get(ingredientList.indexOf(ingredient)).add(ingredient);
         } else {
             ingredientList.add(ingredient);
+        }
+    }
+
+    public void addUser(User user) {
+        if(!users.contains(user)){
+            users.add(user);
         }
     }
 }
