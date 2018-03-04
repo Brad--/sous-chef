@@ -25,8 +25,8 @@ import static org.hamcrest.Matchers.equalTo;
 public class UserIntegrationTest {
 
     private static final String USER_ENDPOINT = "/api/user";
-    private static final String PANTRY_ADD_ENDPOINT = USER_ENDPOINT + "/pantry";
     private static final String ID_KEY = "id";
+    private static final int OWEN_ID = 1;
 
     @Autowired
     private static ObjectMapper objectMapper;
@@ -40,9 +40,9 @@ public class UserIntegrationTest {
         return new User("Owen", "owen@gmail.com", "1234");
     }
 
-    public List<Ingredient> getIngredient() {
+    public List<Ingredient> getIngredient(String itemName) {
         Quantity quantity = new Quantity("Lb", 1234);
-        Ingredient ingredient = new Ingredient("Tofu", quantity);
+        Ingredient ingredient = new Ingredient(itemName, quantity);
         return Collections.singletonList(ingredient);
     }
 
@@ -79,16 +79,30 @@ public class UserIntegrationTest {
     public void testAddItemToPantry() {
         // This should run after 'testCreateUser' which will make Owen with an id of 1, so we're gonna use his id
         User user = getOwen();
-        given().contentType(ContentType.JSON)
-                .param(ID_KEY, 1)
-                .body(getIngredient())
-                .when().post(PANTRY_ADD_ENDPOINT)
-                .then().assertThat().statusCode(equalTo(HttpStatus.OK.value()));
-
+        addToPantry("Tofu");
         given().contentType(ContentType.JSON)
                 .param(ID_KEY, 1)
                 .when().get(USER_ENDPOINT)
                 .then().assertThat()
-                .body("pantry.ingredientList[0].name", equalTo("Tofu"));
+                .body("pantries[0].ingredientList[0].name", equalTo("Tofu"));
+    }
+
+    @Test
+    public void testAddItemTwice() {
+        User user = getOwen();
+        addToPantry("Seitan");
+        addToPantry("Seitan");
+        given().contentType(ContentType.JSON)
+                .param(ID_KEY, 1)
+                .when().get(USER_ENDPOINT)
+                .then().assertThat()
+                .body("pantries[0].ingredientList[1].quantity.quantity", equalTo(2468f));
+    }
+
+    private void addToPantry(String itemName) {
+        given().contentType(ContentType.JSON)
+                .body(getIngredient(itemName))
+                .when().post(USER_ENDPOINT + "/" + OWEN_ID + "/pantry/" + 1)
+                .then().assertThat().statusCode(equalTo(HttpStatus.OK.value()));
     }
 }

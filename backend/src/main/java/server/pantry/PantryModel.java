@@ -1,5 +1,7 @@
 package server.pantry;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.User.User;
 import server.measuring.QuantityMismatchException;
 
@@ -16,6 +18,8 @@ public class PantryModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)    
     private Long id;
     private String name;
+
+    private static Logger logger = LoggerFactory.getLogger(PantryModel.class);
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
@@ -69,15 +73,20 @@ public class PantryModel {
                 addIngredient(ingredient);
             }
             catch(Exception e) {
-                //TODO after logger config: log this error
+                logger.error("Error adding ingredient {} to pantry.", ingredient.getName());
             }
         });
     }
 
     public void addIngredient(Ingredient ingredient) throws IngredientMismatchException, QuantityMismatchException {
-        if(ingredientList.contains(ingredient)) {
-            ingredientList.get(ingredientList.indexOf(ingredient)).add(ingredient);
-        } else {
+        boolean found = false;
+        for(Ingredient i : ingredientList) {
+            if(i.getName().equals(ingredient.getName())) {
+                i.getQuantity().add(ingredient.getQuantity());
+                found = true;
+            }
+        }
+        if(!found) {
             ingredientList.add(ingredient);
         }
     }
