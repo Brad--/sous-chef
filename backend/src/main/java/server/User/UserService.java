@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import server.pantry.Ingredient;
 import server.pantry.PantryModel;
 import server.pantry.PantryService;
+import server.persistence.EntityNotFoundException;
 
 import java.util.List;
 
@@ -47,14 +48,17 @@ public class UserService {
         return userRepository.findOne(id);
     }
 
-    public User addIngredientsToPantry(Long userId, Long pantryId, List<Ingredient> ingredients) throws UserNotFoundException{
+    public void addIngredientsToPantry(Long userId, Long pantryId, List<Ingredient> ingredients) throws EntityNotFoundException {
         User user = getUserById(userId);
         if(user == null) {
-            throw new UserNotFoundException();
+            logger.error("User {} not found.", userId);
+            throw new EntityNotFoundException("User");
         }
-//        user.addItemsToPantry(ingredients);
-        userRepository.save(user);
-        // TODO save new ingredients in the pantry or update existing ones. Imma go play starcraft
-        return user;
+        if(user.validPantry(pantryId)) {
+            pantryService.addIngredientsList(pantryId, ingredients);
+        } else {
+            // This can happen if the pantry does not exist or the user does not have access to the pantry
+            logger.error("Unable to add ingredients to pantry {} for user {}.", pantryId, userId);
+        }
     }
 }

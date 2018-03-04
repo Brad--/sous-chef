@@ -61,4 +61,22 @@ public class User {
         // TODO rework for multi-pantry
 //        this.pantries.addIngredientList(ingredients);
     }
+
+    public PantryModel getPantryById(Long pantryId) {
+        for(PantryModel pantry : this.pantries) {
+            if(pantry.getId() == pantryId) {
+                return pantry;
+            }
+        }
+        return null;
+    }
+
+    public boolean validPantry(Long pantryId) {
+        for(PantryModel pantry : this.pantries) {
+            if(pantry.getId() == pantryId) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

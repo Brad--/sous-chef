@@ -5,6 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import server.User.User;
+import server.persistence.EntityNotFoundException;
+
+import java.util.List;
 
 @Service
 public class PantryService {
@@ -34,6 +37,18 @@ public class PantryService {
         if(pantry == null) {
             logger.error("No pantry found with id: {}", pantryId);
         }
+        return pantry;
+    }
+
+    public PantryModel addIngredientsList(Long pantryId, List<Ingredient> ingredientList) throws EntityNotFoundException {
+        PantryModel pantry = pantryRepository.findOne(pantryId);
+        if(pantry == null) {
+            logger.error("Pantry {} not found.", pantryId);
+            throw new EntityNotFoundException("Pantry");
+        }
+        pantry.addIngredientList(ingredientList);
+        pantryRepository.save(pantry);
+        logger.trace("Successfully added list to pantry");
         return pantry;
     }
 }

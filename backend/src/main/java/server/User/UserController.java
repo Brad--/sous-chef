@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.pantry.Ingredient;
+import server.persistence.EntityNotFoundException;
 
 import java.util.List;
 
@@ -18,10 +19,9 @@ public class UserController {
         return new ResponseEntity<>("Email address already in use.", HttpStatus.CONFLICT);
     }
 
-    // Clearly this is a bad format. Gotta get better exception handling
-    @ExceptionHandler({UserNotFoundException.class})
+    @ExceptionHandler({EntityNotFoundException.class})
     public ResponseEntity<Object> handleUserNotFound(Exception e) {
-        return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("User / Pantry not found", HttpStatus.NOT_FOUND);
     }
 
     @Autowired
@@ -46,12 +46,13 @@ public class UserController {
     }
 
     @PostMapping("/user/{userId}/pantry/{pantryId}")
-    public User addIngredients(
+    public HttpStatus addIngredients(
             @PathVariable("userId") Long userId,
             @PathVariable("pantryId") Long pantryId,
             @RequestBody List<Ingredient> ingredientList
-    ) throws UserNotFoundException {
-        return userService.addIngredientsToPantry(userId, pantryId, ingredientList);
+    ) throws EntityNotFoundException {
+        userService.addIngredientsToPantry(userId, pantryId, ingredientList);
+        return HttpStatus.OK;
     }
 
     // TODO: Delete User

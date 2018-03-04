@@ -47,6 +47,10 @@ public class PantryModel {
         return ingredientList;
     }
 
+    public Long getId() {
+        return this.id;
+    }
+
     public String getName() {
         return name;
     }
